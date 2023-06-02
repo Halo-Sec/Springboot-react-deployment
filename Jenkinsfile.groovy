@@ -21,7 +21,7 @@ pipeline {
     
     stage ('Build and test') {
       agent {
-        docker 'maven'
+        docker { image 'maven' }
       }
       stages {
         stage ('Build') {
