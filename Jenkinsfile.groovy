@@ -11,6 +11,18 @@ pipeline {
   triggers {
     scm('*/1 * * * *')
   }
+
+  stages{
+    stage ('checkout') {
+      checkout scm
+    }
+
+    docker.image ('maven').inside{
+      stage ('Build') {
+        steps {
+         sh 'mvn clean package' 
+        }
+      }
   
   
 
