@@ -1,0 +1,8 @@
+node_modules
+.terraform*
+instance_security
+mvnw
+mvnw.cmd
+Variables.tf
+user-*
+Dockerfile
