@@ -1,5 +1,5 @@
 pipeline {
-  agent any
+  agent none
 
   environment {
     AWS_KEY_ID = credentials ('')
@@ -20,25 +20,23 @@ pipeline {
     }
     
     stage ('Build and test') {
-      steps {
-        script {
-          docker.image ('maven').inside{
-            stage ('Build') {
-              steps {
-                sh 'mvn clean package'
-              }
-            }
-          
-            stage ('Test') {
-              steps {
-                sh 'mvn test'
-              }
-            }    
+      agent {
+        docker 'maven'
+      }
+      stages {
+        stage ('Build') {
+          steps {
+            sh 'mvn clean package'
+          }
+        }
+                 
+        stage ('Test') {
+          steps {
+            sh 'mvn test'
           }
         }
       }
     }
-  
    
 
     stage ('Get Container ID') {
