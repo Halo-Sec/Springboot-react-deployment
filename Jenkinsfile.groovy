@@ -9,29 +9,37 @@ pipeline {
     AWS_REGION = 'us-east-1'
   }
   triggers {
-    scm('*/1 * * * *')
+    pollSCM ('*/1 * * * *')
   }
 
   stages{
     stage ('checkout') {
-      checkout scm
+      steps{
+        checkout scm
+      }
     }
-
-    docker.image ('maven').inside{
-      stage ('Build') {
-        steps {
-         sh 'mvn clean package' 
+    
+    stage ('Build and test') {
+      steps {
+        script {
+          docker.image ('maven').inside{
+            stage ('Build') {
+              steps {
+                sh 'mvn clean package'
+              }
+            }
+          
+            stage ('Test') {
+              steps {
+                sh 'mvn test'
+              }
+            }    
+          }
         }
       }
-  
-  
-
-      stage ('Test') {
-        steps {
-          sh 'mvn test'
-        } 
-      }
     }
+  
+   
 
     stage ('Get Container ID') {
       steps {
@@ -43,18 +51,27 @@ pipeline {
       }
     }
 
-
-    docker.image ('chriscamicas/awscli-awsebcli'). inside{
-        withAWS(credentials: 'aws-credentials'){
-            stage ('prepare environment'){
+    stage ('Deploy') {
+      steps {
+        script {
+          docker.image ('chriscamicas/awscli-awsebcli'). inside{
+            withAWS(credentials: 'aws-credentials'){
+              stage ('prepare environment'){
                 sh 'eb init ${AWS_EB_APP_NAME} --keyname "Spring" --platform "Docker Running on 64bit Amazon Linux 2" --region $(AWS_REGION)'
                 sh 'eb create ${AWS_EB_ENV_NAME} --cname-prefix ${AWS_EB_ENV_NAME} --instance-type t2.micro --platform "Docker Running on 64bit Amazon Linux 2"'
+              }
+              
+              stage ('deployment'){
+                steps {
+                  sh 'eb deploy --label "version ${BUILD_NUMBER}"'
+                  sh 'eb status'
+                }
+              }
+              
             }
-            stage ('deployment'){
-                sh 'eb deploy --label "version ${BUILD_NUMBER}"'
-                sh 'eb status'
-            }
+          }
         }
-    }       
+      }
+    }
   }
 }
