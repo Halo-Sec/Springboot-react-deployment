@@ -41,8 +41,8 @@ pipeline {
     stage('Get Container ID') {
       steps {
         script {
-          def containerId = sh(returnStdout: true, script: 'docker ps -q --filter ancestor=maven:latest').trim()
-          def jar_file = sh(returnStdout: true, script: "docker exec ${containerId} find . -type f -name 'react-and-spring-data-rest-0.0.1-SNAPSHOT.jar'").trim()
+          def containerId = sh(returnStdout: true, script: 'sudo docker ps -q --filter ancestor=maven:latest').trim()
+          def jar_file = sh(returnStdout: true, script: "sudo docker exec ${containerId} find . -type f -name 'react-and-spring-data-rest-0.0.1-SNAPSHOT.jar'").trim()
           sh "docker cp ${containerId}:${jar_file} ./"
         }
       }
