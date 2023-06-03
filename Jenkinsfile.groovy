@@ -22,15 +22,17 @@ pipeline {
       steps {
         script {
           docker.image('maven').inside {
-            stage('Build') {
-              steps {
-                sh 'mvn clean package'
+            stages{
+              stage('Build') {
+                steps {
+                  sh 'mvn clean package'
+                }
               }
-            }
-
-            stage('Test') {
-              steps {
-                sh 'mvn test'
+              
+              stage('Test') {
+                steps {
+                  sh 'mvn test'
+                }
               }
             }
           }
