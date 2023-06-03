@@ -22,17 +22,15 @@ pipeline {
       steps {
         script {
           docker.image('maven').inside {
-            stages{
-              stage('Build') {
-                steps {
-                  mvn 'clean package'
-                }
+            stage('Build') {
+              steps {
+                sh 'mvn clean package'
               }
-              
-              stage('Test') {
-                steps {
-                  mvn 'test'
-                }
+            }
+
+            stage('Test') {
+              steps {
+                sh 'mvn test'
               }
             }
           }
@@ -55,19 +53,17 @@ pipeline {
         script {
           docker.image('chriscamicas/awscli-awsebcli').inside {
             withAWS(credentials: 'aws-credentials') {
-              stages{
-                stage('prepare environment') {
-                  steps {
-                    sh "eb init ${AWS_EB_APP_NAME} --keyname 'Spring' --platform 'Docker Running on 64bit Amazon Linux 2' --region ${AWS_REGION}"
-                    sh "eb create ${AWS_EB_ENV_NAME} --cname-prefix ${AWS_EB_ENV_NAME} --instance-type t2.micro --platform 'Docker Running on 64bit Amazon Linux 2'"
-                  }
-                } 
-                
-                stage ('deployment'){
-                  steps {
-                    sh 'eb deploy --label "version ${BUILD_NUMBER}"'
-                    sh 'eb status'
-                  }
+              stage('prepare environment') {
+                steps {
+                  sh "eb init ${AWS_EB_APP_NAME} --keyname 'Spring' --platform 'Docker Running on 64bit Amazon Linux 2' --region ${AWS_REGION}"
+                  sh "eb create ${AWS_EB_ENV_NAME} --cname-prefix ${AWS_EB_ENV_NAME} --instance-type t2.micro --platform 'Docker Running on 64bit Amazon Linux 2'"
+                }
+              }
+
+              stage('deployment') {
+                steps {
+                  sh 'eb deploy --label "version ${BUILD_NUMBER}"'
+                  sh 'eb status'
                 }
               }
             }
