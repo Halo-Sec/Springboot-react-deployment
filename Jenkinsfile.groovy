@@ -41,8 +41,8 @@ pipeline {
     stage('Get Container ID') {
       steps {
         script {
-          def containerId = sh(returnStdout: true, script: 'sudo docker ps -q --filter ancestor=maven:latest').trim()
-          def jar_file = sh(returnStdout: true, script: "sudo docker exec ${containerId} find . -type f -name 'react-and-spring-data-rest-0.0.1-SNAPSHOT.jar'").trim()
+          def containerId = sh(returnStdout: true, script: 'docker ps -q --filter ancestor=maven:latest').trim()
+          def jar_file = sh(returnStdout: true, script: "docker exec ${containerId} find . -type f -name \"react-and-spring-data-rest-0.0.1-SNAPSHOT.jar\"").trim()
           sh "docker cp ${containerId}:${jar_file} ./"
         }
       }
@@ -54,8 +54,8 @@ pipeline {
           docker.image('chriscamicas/awscli-awsebcli').inside {
             withAWS(credentials: 'aws-credentials') {
               stage('prepare environment') {
-                sh "eb init ${AWS_EB_APP_NAME} --keyname 'Spring' --platform 'Docker Running on 64bit Amazon Linux 2' --region ${AWS_REGION}"
-                sh "eb create ${AWS_EB_ENV_NAME} --cname-prefix ${AWS_EB_ENV_NAME} --instance-type t2.micro --platform 'Docker Running on 64bit Amazon Linux 2'"
+                sh "eb init ${AWS_EB_APP_NAME} --keyname \"Spring\" --platform \"Docker Running on 64bit Amazon Linux 2\" --region ${AWS_REGION}"
+                sh "eb create ${AWS_EB_ENV_NAME} --cname-prefix ${AWS_EB_ENV_NAME} --instance-type t2.micro --platform \"Docker Running on 64bit Amazon Linux 2\""
               }
             }
           }
