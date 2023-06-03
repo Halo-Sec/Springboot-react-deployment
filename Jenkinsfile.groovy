@@ -2,8 +2,6 @@ pipeline {
   agent any
 
   environment {
-    AWS_KEY_ID = credentials('your-aws-key-id')
-    AWS_SECRET_KEY = credentials('your-aws-secret-key')
     AWS_EB_APP_NAME = 'springbootapp'
     AWS_EB_ENV_NAME = 'springbootapp-env'
     AWS_REGION = 'us-east-1'
