@@ -20,7 +20,7 @@ pipeline {
     stage ('Build and test') {
       steps {
         script {
-          docker.image ('maven').inside('-v /home/ec2-user/.m2/repository:/root/.m2/repository:rwoy@tmp:rw,z') {
+          docker.image ('maven').inside('-v /home/ec2-user/.m2/repository:/root/.m2/repository:rw') {
             stage ('Build') {
               sh 'mvn clean package'
             }
