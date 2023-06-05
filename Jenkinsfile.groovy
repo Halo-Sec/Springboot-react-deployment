@@ -20,7 +20,7 @@ pipeline {
     stage ('Build and test') {
       steps {
         script {
-          docker.image ('maven').inside('-v /home/ec2-user/.m2/repository:/root/.m2/repository -e MAVEN_OPTS="-Duser.home=/root"') {
+          docker.image ('maven').inside('-v /home/ec2-user/.m2/repository:/root/.m2/repository:rw -w /var/lib/jenkins/workspace/SpringDeploy -v /var/lib/jenkins/workspace/SpringDeploy:/var/lib/jenkins/workspace/SpringDeploy:rw,z -v /var/lib/jenkins/workspace/SpringDeploy@tmp:/var/lib/jenkins/workspace/SpringDeploy@tmp:rw,z -e MAVEN_OPTS="-Duser.home=/root"') {
             stage ('Build') {
               sh 'mvn clean package'
             }
