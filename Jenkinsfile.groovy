@@ -1,5 +1,6 @@
 pipeline {
   agent any
+  tools {nodejs "NODEJS"}
 
   environment {
     AWS_EB_APP_NAME = 'springbootapp'
