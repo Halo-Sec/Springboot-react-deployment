@@ -23,8 +23,6 @@ pipeline {
         script {
           docker.image('maven').inside('-u root') {
             stage('Build') {
-              sh 'dnf install -y npm'
-              sh 'npm install'
               echo 'Executing: mvn clean package'
               sh 'mvn clean package'
             }
