@@ -31,7 +31,7 @@ pipeline {
             }
 
             stage('Test') {
-              echo 'Executing: mvn tes'
+              echo 'Executing: mvn test'
               sh 'mvn test'
             }
           }
