@@ -4,8 +4,8 @@ pipeline {
   }
 
   environment {
-    AWS_EB_APP_NAME = 'springbootapp'
-    AWS_EB_ENV_NAME = 'springbootapp-env'
+    AWS_EB_APP_NAME = 'springbootapp_${BUILD_NUMBER}'
+    AWS_EB_ENV_NAME = 'springbootapp-env-${BUILD_NUMBER}'
     AWS_REGION = 'us-east-1'
   }
 
