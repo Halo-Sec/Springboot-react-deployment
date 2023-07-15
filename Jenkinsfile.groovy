@@ -1,13 +1,14 @@
 pipeline {
   agent {
-      label 'agent1'
-    }
+    label 'agent1'
+  }
 
   environment {
     AWS_EB_APP_NAME = 'springbootapp'
     AWS_EB_ENV_NAME = 'springbootapp-env'
     AWS_REGION = 'us-east-1'
   }
+
   triggers {
     pollSCM('*/1 * * * *')
   }
@@ -20,8 +21,10 @@ pipeline {
     }
 
     stage('Build and test') {
-      sh 'mvn clean package'
-      sh 'mvn test'
+      steps {
+        sh 'mvn clean package'
+        sh 'mvn test'
+      }
     }
 
     stage('Deploy') {
