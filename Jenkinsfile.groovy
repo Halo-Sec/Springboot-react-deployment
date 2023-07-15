@@ -22,7 +22,7 @@ pipeline {
     stage('Build and test') {
       steps {
         script {
-          docker.image('maven').withRun('-d --rm=false') {
+          docker.image('maven').inside('-u root') {
             stage('Build') {
               echo 'Executing: mvn clean package'
               sh 'mvn clean package'
