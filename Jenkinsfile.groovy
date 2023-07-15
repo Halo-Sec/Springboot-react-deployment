@@ -33,10 +33,10 @@ pipeline {
           docker.image('chriscamicas/awscli-awsebcli').inside {
             withAWS(credentials: 'aws-credentials') {
               stage('prepare environment') {
-                echo "Executing: eb init ${AWS_EB_APP_NAME} --keyname 'Spring' --platform 'Docker Running on 64bit Amazon Linux 2' --region ${AWS_REGION}"
-                sh "eb init ${AWS_EB_APP_NAME} --keyname 'Spring' --platform 'Docker Running on 64bit Amazon Linux 2' --region ${AWS_REGION}"
+                echo "Executing: eb init ${AWS_EB_APP_NAME} --keyname 'Spring' --platform '64bit Amazon Linux 2 v3.5.9 running Docker' --region ${AWS_REGION}"
+                sh "eb init ${AWS_EB_APP_NAME} --keyname 'Spring' --platform '64bit Amazon Linux 2 v3.5.9 running Docker' --region ${AWS_REGION}"
                 echo "Executing: eb create ${AWS_EB_ENV_NAME} --cname-prefix ${AWS_EB_ENV_NAME} --instance-type t2.micro --platform 'Docker Running on 64bit Amazon Linux 2'"
-                sh "eb create ${AWS_EB_ENV_NAME} --cname-prefix ${AWS_EB_ENV_NAME} --instance-type t2.micro --platform 'Docker Running on 64bit Amazon Linux 2'"
+                sh "eb create ${AWS_EB_ENV_NAME} --cname-prefix ${AWS_EB_ENV_NAME} --instance-type t2.micro --platform '64bit Amazon Linux 2 v3.5.9 running Docker'"
               }
 
               stage('deployment') {
