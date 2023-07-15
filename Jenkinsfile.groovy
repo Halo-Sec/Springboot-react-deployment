@@ -20,36 +20,8 @@ pipeline {
     }
 
     stage('Build and test') {
-      steps {
-        script {
-          docker.image('maven').withRun ('--rm=false') {
-            stage('Build') {
-              echo 'Executing: mvn clean package'
-              sh 'mvn clean package'
-            }
-
-            stage('Test') {
-              echo 'Executing: mvn test'
-              sh 'mvn test'
-            }
-          }
-        }
-      }
-    }
-
-    stage('Get Container ID') {
-        steps {
-            script {
-                sh '''
-                  containerId=$(docker ps -q --filter ancestor=maven:latest | tr -d '\r\n')
-                  jarFile=$(docker exec $containerId find / -type f -name 'react-and-spring-data-rest-0.0.1-SNAPSHOT.jar' | tr -d '\r\n')
-                  echo "Container ID: $containerId"
-                  echo "JAR file: $jarFile"
-                  docker cp $containerId:$jarFile ./
-                '''
-            }
-        }
-        
+      sh 'mvn clean package'
+      sh 'mvn test'
     }
 
     stage('Deploy') {
